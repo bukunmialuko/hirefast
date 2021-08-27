@@ -38,6 +38,6 @@ export class CreateInterviewUseCase extends UseCase<
 
     await this.interviewsRepository.save(interview);
 
-    return new CreateInterviewResponse({} as Interview);
+    return new CreateInterviewResponse(interview);
   }
 }
