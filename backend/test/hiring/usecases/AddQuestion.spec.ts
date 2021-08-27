@@ -1,7 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { INTERVIEWS_REPOSITORY } from 'src/hiring/details/IInterviewsRepository';
 import { Interview } from 'src/hiring/domain/interview/Interview';
-import { PANELIST_SERVICE } from 'src/hiring/services/IPanelistService';
+import { AddQuestionUseCase } from 'src/hiring/usecases/add-question/AddQuestion.usecase';
 
 describe('AddQuestion(UseCase)', () => {
   let addQuestionUseCase;

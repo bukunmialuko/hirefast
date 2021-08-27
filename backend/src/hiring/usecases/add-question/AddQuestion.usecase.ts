@@ -7,4 +7,8 @@ import { AddQuestionResponse } from 'src/hiring/usecases/add-question/AddQuestio
 export class AddQuestionUseCase extends UseCase<
   AddQuestionInput,
   AddQuestionResponse
-> {}
+> {
+  async run(dto: AddQuestionInput): Promise<AddQuestionResponse> {
+    return Promise.resolve(undefined);
+  }
+}
