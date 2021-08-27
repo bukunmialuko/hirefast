@@ -110,5 +110,11 @@ describe('CreateInterview(UseCase)', () => {
       await createInterview(createInterviewInput);
       assertIdNewInterviewSaved(mockInterview);
     });
+
+    it('should return interview in response', async () => {
+      const response = await createInterview(createInterviewInput);
+      expect(response).toBeDefined();
+      expect(response.interview).toEqual(mockInterview);
+    });
   });
 });
