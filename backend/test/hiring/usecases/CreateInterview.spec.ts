@@ -52,11 +52,11 @@ describe('CreateInterview(UseCase)', () => {
     expect(panelistService.findById).toBeCalledWith(id);
   };
 
-  const assertIdNewInterviewCreated = (input: CreateInterviewInput) => {
+  const assertIfNewInterviewCreated = (input: CreateInterviewInput) => {
     expect(Interview.create).toBeCalledWith(input);
   };
 
-  const assertIdNewInterviewSaved = (interview: Interview) => {
+  const assertIfNewInterviewSaved = (interview: Interview) => {
     expect(interviewsRepository.save).toBeCalledWith(interview);
   };
 
@@ -103,12 +103,12 @@ describe('CreateInterview(UseCase)', () => {
 
     it('should create new interview', async () => {
       await createInterview(createInterviewInput);
-      assertIdNewInterviewCreated(createInterviewInput);
+      assertIfNewInterviewCreated(createInterviewInput);
     });
 
     it('should save the interview', async () => {
       await createInterview(createInterviewInput);
-      assertIdNewInterviewSaved(mockInterview);
+      assertIfNewInterviewSaved(mockInterview);
     });
 
     it('should return interview in response', async () => {
