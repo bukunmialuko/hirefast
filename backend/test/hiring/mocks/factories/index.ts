@@ -1,10 +1,14 @@
+import { IsInt, IsNotEmpty, IsString } from 'class-validator';
 import {
   Interview,
   InterviewStatus,
 } from 'src/hiring/domain/interview/Interview';
-import { InterviewDetails } from 'src/hiring/domain/interview/InterviewDetails';
-import { Question } from 'src/hiring/domain/interview/Question';
+import {
+  Question,
+  QuestionResponse,
+} from 'src/hiring/domain/interview/Question';
 import { Panelist } from 'src/hiring/domain/Panelist';
+import { AddQuestionInput } from 'src/hiring/usecases/add-question/AddQuestionInput.dto';
 import { CreateInterviewInput } from 'src/hiring/usecases/create-interview/CreateInterviewInput.dto';
 
 export const MockPanelist = (values?: Partial<Panelist>): Panelist => {
@@ -69,5 +73,41 @@ export const MockInterview = (values?: Partial<Interview>): Interview => {
   mock.status = defaultValues.status;
   mock.createdAt = defaultValues.createdAt;
   mock.updatedAt = defaultValues.updatedAt;
+  return mock;
+};
+
+export const MockAddQuestionInput = (
+  values?: Partial<AddQuestionInput>,
+): AddQuestionInput => {
+  const defaultValues = {
+    interviewId: 'asjkdvaksdfksadf',
+    panelistId: 'asdflksajdflkajskdfsad',
+    title: 'This is really good question',
+    responseType: QuestionResponse.TEXT,
+    timeAllowedInMinutes: 2,
+    ...values,
+  };
+  const mock = new AddQuestionInput();
+  mock.interviewId = defaultValues.interviewId;
+  mock.panelistId = defaultValues.panelistId;
+  mock.title = defaultValues.title;
+  mock.responseType = defaultValues.responseType;
+  mock.timeAllowedInMinutes = defaultValues.timeAllowedInMinutes;
+  return mock;
+};
+
+export const MockQuestion = (values?: Partial<Question>): Question => {
+  const defaultValues = {
+    sequenceNumber: 1,
+    title: 'This is really good question',
+    responseType: QuestionResponse.TEXT,
+    timeAllowedInMinutes: 2,
+    ...values,
+  };
+  const mock = new Question();
+  mock.sequenceNumber = defaultValues.sequenceNumber;
+  mock.title = defaultValues.title;
+  mock.responseType = defaultValues.responseType;
+  mock.timeAllowedInMinutes = defaultValues.timeAllowedInMinutes;
   return mock;
 };
