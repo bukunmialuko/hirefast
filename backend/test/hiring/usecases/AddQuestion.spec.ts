@@ -3,6 +3,7 @@ import { INTERVIEWS_REPOSITORY } from 'src/hiring/details/IInterviewsRepository'
 import { Interview } from 'src/hiring/domain/interview/Interview';
 import { AddQuestionUseCase } from 'src/hiring/usecases/add-question/AddQuestion.usecase';
 import { AddQuestionInput } from 'src/hiring/usecases/add-question/AddQuestionInput.dto';
+import { InvalidInterviewIdError } from 'src/hiring/usecases/add-question/InvalidInterviewId.error';
 import { MockAddQuestionInput } from 'test/hiring/mocks/factories';
 
 describe('AddQuestion(UseCase)', () => {
@@ -54,7 +55,9 @@ describe('AddQuestion(UseCase)', () => {
     });
 
     it('should throw error', async () => {
-      await expect(addQuestion(addQuestionInput)).rejects.toThrowError();
+      await expect(addQuestion(addQuestionInput)).rejects.toThrowError(
+        new InvalidInterviewIdError(),
+      );
       assertIfSearchedForInterviewId(mockInterviewId);
     });
   });
