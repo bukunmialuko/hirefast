@@ -7,8 +7,9 @@ import {
 } from 'class-validator';
 import { InterviewDetails } from 'src/hiring/domain/interview/InterviewDetails';
 import { Question } from 'src/hiring/domain/interview/Question';
+import { CreateInterviewInput } from 'src/hiring/usecases/create-interview/CreateInterviewInput.dto';
 
-enum InterviewStatus {
+export enum InterviewStatus {
   DRAFT = 'DRAFT',
   PUBLISHED = 'PUBLISHED',
   DELETED = 'DELETED',
@@ -37,4 +38,8 @@ export class Interview {
 
   @IsDateString()
   updatedAt: string;
+
+  public static create(input: CreateInterviewInput): Interview {
+    return new Interview();
+  }
 }
