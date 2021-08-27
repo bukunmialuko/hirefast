@@ -18,4 +18,8 @@ export class Question {
   @IsString()
   @IsNotEmpty()
   responseType: QuestionResponse;
+
+  @IsInt()
+  @IsNotEmpty()
+  timeAllowedInMinutes: number;
 }

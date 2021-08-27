@@ -56,4 +56,16 @@ export class User {
     user.updatedAt = currentDate;
     return user;
   }
+
+  public isActive(): boolean {
+    return this.status === UserStatus.ACTIVE;
+  }
+
+  public isVerified(): boolean {
+    return this.status !== UserStatus.NOT_VERIFIED;
+  }
+
+  public isDeactivated(): boolean {
+    return this.status === UserStatus.DEACTIVATED;
+  }
 }

@@ -6,7 +6,7 @@ import {
   IsUUID,
 } from 'class-validator';
 import { InterviewDetails } from 'src/hiring/domain/interview/InterviewDetails';
-import { QuestionsInformation } from 'src/hiring/domain/interview/QuestionsInformation';
+import { Question } from 'src/hiring/domain/interview/Question';
 
 enum InterviewStatus {
   DRAFT = 'DRAFT',
@@ -23,7 +23,7 @@ export class Interview {
   interviewDetails: InterviewDetails;
 
   @IsNotEmptyObject()
-  questionsInformation: QuestionsInformation;
+  questions: Question[];
 
   @IsNotEmpty()
   @IsString()

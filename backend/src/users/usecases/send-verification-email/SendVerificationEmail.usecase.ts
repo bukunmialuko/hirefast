@@ -47,8 +47,7 @@ export class SendVerificationEmailUseCase extends UseCase<
       throw new EmailNotFoundOrAlreadyVerifiedError();
     }
 
-    const userAlreadyVerified = user.status != UserStatus.NOT_VERIFIED;
-    if (userAlreadyVerified) {
+    if (user.isVerified()) {
       throw new EmailNotFoundOrAlreadyVerifiedError();
     }
 

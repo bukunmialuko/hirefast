@@ -49,6 +49,20 @@ describe('RegisterUser(UseCase)', () => {
     expect(userRepository.findByEmail).toHaveBeenCalledWith(email);
   };
 
+  const assertIfNewUserCreated = (input: RegisterUserInput) => {
+    expect(User.register).toHaveBeenCalledWith(input);
+  };
+
+  const assertIfNewUserSaved = (input: User) => {
+    expect(userRepository.save).toHaveBeenCalledWith(input);
+  };
+
+  const assertIfVerificationEmailSendTried = (
+    input: SendVerificationEmailInput,
+  ) => {
+    expect(sendVerificationEmailUseCase.run).toHaveBeenCalledWith(input);
+  };
+
   describe('when email is found', () => {
     let user;
     const registerInput = MockRegisterUserInput();
@@ -74,20 +88,6 @@ describe('RegisterUser(UseCase)', () => {
       jest.spyOn(userRepository, 'save').mockResolvedValue(mockUser);
       jest.spyOn(User, 'register').mockReturnValue(mockUser);
     });
-
-    const assertIfNewUserCreated = (input: RegisterUserInput) => {
-      expect(User.register).toHaveBeenCalledWith(input);
-    };
-
-    const assertIfNewUserSaved = (input: User) => {
-      expect(userRepository.save).toHaveBeenCalledWith(input);
-    };
-
-    const assertIfVerificationEmailSendTried = (
-      input: SendVerificationEmailInput,
-    ) => {
-      expect(sendVerificationEmailUseCase.run).toHaveBeenCalledWith(input);
-    };
 
     it('should create new user', async () => {
       await registerUser(registerInput);

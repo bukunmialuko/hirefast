@@ -16,7 +16,7 @@ export const MockRegisterUserInput = (
 };
 
 export const MockUser = (values?: Partial<User>): User => {
-  const defaultValues: User = {
+  const defaultValues = {
     id: 'sadfkasjdkfljas;ldfjaskdf',
     email: 'vikassandhu999@gmail.com',
     fullName: 'Vikas',
@@ -24,9 +24,18 @@ export const MockUser = (values?: Partial<User>): User => {
     status: UserStatus.NOT_VERIFIED,
     createdAt: '2021-08-25T04:18:36.037Z',
     updatedAt: '2021-08-25T04:18:36.037Z',
+    ...values,
   };
 
-  return { ...defaultValues, ...values };
+  const user = new User();
+  user.id = defaultValues.id;
+  user.email = defaultValues.email;
+  user.fullName = defaultValues.fullName;
+  user.password = defaultValues.password;
+  user.status = defaultValues.status;
+  user.createdAt = defaultValues.createdAt;
+  user.updatedAt = defaultValues.updatedAt;
+  return user;
 };
 
 export const MockVerification = (
