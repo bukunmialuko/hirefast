@@ -20,7 +20,7 @@ export class Interview {
   id: string;
 
   @IsUUID()
-  interviewerId: string;
+  panelistId: string;
 
   @IsNotEmptyObject()
   interviewDetails: InterviewDetails;
@@ -28,8 +28,8 @@ export class Interview {
   @IsNotEmptyObject()
   questions: Question[];
 
-  @IsNotEmpty()
   @IsString()
+  @IsNotEmpty()
   status: InterviewStatus;
 
   @IsDateString()

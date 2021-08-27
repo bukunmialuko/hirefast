@@ -6,8 +6,13 @@ export class InterviewDetails {
   jobTitle: string;
 
   @IsString()
+  @IsNotEmpty()
+  companyName: string;
+
+  @IsString()
   jobDescription: string;
 
   @IsDateString()
+  @IsNotEmpty()
   deadlineDate: string;
 }
