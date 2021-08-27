@@ -19,6 +19,9 @@ export class Interview {
   @IsUUID()
   id: string;
 
+  @IsUUID()
+  interviewerId: string;
+
   @IsNotEmptyObject()
   interviewDetails: InterviewDetails;
 
