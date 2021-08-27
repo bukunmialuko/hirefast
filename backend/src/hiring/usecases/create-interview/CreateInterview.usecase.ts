@@ -11,7 +11,7 @@ import {
   PANELIST_SERVICE,
 } from 'src/hiring/services/IPanelistService';
 import { CreateInterviewInput } from 'src/hiring/usecases/create-interview/CreateInterviewInput.dto';
-import { CreateInterviewResponse } from 'src/hiring/usecases/create-interview/CreateInterviewResponse';
+import { CreateInterviewResponse } from 'src/hiring/usecases/create-interview/CreateInterviewResponse.dto';
 import { InvalidPanelistIdError } from 'src/hiring/usecases/create-interview/InvalidPanelistId.error';
 
 @Injectable()
