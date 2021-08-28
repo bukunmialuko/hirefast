@@ -49,8 +49,11 @@ export class AddQuestionUseCase extends UseCase<
 
     const question = Question.create(input);
 
-    await this.interviewsRepository.addQuestion(interviewId, question);
+    const updatedInterview = await this.interviewsRepository.addQuestion(
+      interviewId,
+      question,
+    );
 
-    return Promise.resolve(undefined);
+    return new AddQuestionResponse(updatedInterview);
   }
 }

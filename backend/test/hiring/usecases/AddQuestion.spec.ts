@@ -199,6 +199,11 @@ describe('AddQuestion(UseCase)', () => {
         await addQuestion(mockAddQuestionInput);
         assertIfQuestionIsAdded(mockInterviewId, mockQuestion);
       });
+
+      it('should return updated interview with response', async () => {
+        const response = await addQuestion(mockAddQuestionInput);
+        expect(response.interview).toEqual(mockInterviewAfterQuestionAdded);
+      });
     });
   });
 });
