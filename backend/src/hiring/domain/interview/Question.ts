@@ -8,7 +8,6 @@ export enum QuestionResponse {
 
 export class Question {
   @IsInt()
-  @IsNotEmpty()
   sequenceNumber: number;
 
   @IsString()

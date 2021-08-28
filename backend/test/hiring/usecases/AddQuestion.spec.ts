@@ -4,6 +4,7 @@ import {
   Interview,
   InterviewStatus,
 } from 'src/hiring/domain/interview/Interview';
+import { Question } from 'src/hiring/domain/interview/Question';
 import { AddQuestionUseCase } from 'src/hiring/usecases/add-question/AddQuestion.usecase';
 import { AddQuestionInput } from 'src/hiring/usecases/add-question/AddQuestionInput.dto';
 import { InterviewHasBeenArchivedError } from 'src/hiring/usecases/add-question/InterviewHasBeenArchived.error';
@@ -13,6 +14,7 @@ import { InvalidInterviewIdError } from 'src/hiring/usecases/add-question/Invali
 import {
   MockAddQuestionInput,
   MockInterview,
+  MockQuestion,
 } from 'test/hiring/mocks/factories';
 
 describe('AddQuestion(UseCase)', () => {
@@ -21,6 +23,7 @@ describe('AddQuestion(UseCase)', () => {
   const interviewsRepository = {
     save: (interview: Interview) => undefined,
     findById: (id: string) => undefined,
+    addQuestion: (interviewId: string, question: Question) => undefined,
   };
 
   beforeEach(async () => {
@@ -47,6 +50,13 @@ describe('AddQuestion(UseCase)', () => {
 
   const assertIfSearchedForInterviewId = (id: string) => {
     expect(interviewsRepository.findById).toHaveBeenCalledWith(id);
+  };
+
+  const assertIfQuestionIsAdded = (interviewId: string, question: Question) => {
+    expect(interviewsRepository.addQuestion).toHaveBeenCalledWith(
+      interviewId,
+      question,
+    );
   };
 
   describe('when interview id is not found', () => {
@@ -141,6 +151,43 @@ describe('AddQuestion(UseCase)', () => {
           new InterviewHasBeenDeletedError(),
         );
         assertIfSearchedForInterviewId(mockInterviewId);
+      });
+    });
+
+    describe('and interview status is DRAFT', () => {
+      let mockQuestion;
+      let mockInterviewAfterQuestionAdded;
+      beforeEach(() => {
+        mockQuestion = MockQuestion();
+        mockInterview = MockInterview({
+          panelistId: mockPanelistId,
+          id: mockInterviewId,
+          status: InterviewStatus.DRAFT,
+        });
+
+        const nextSeq = mockInterview.questions.length + 1;
+        const updatedQuestions = [
+          ...mockInterview.questions,
+          { ...mockQuestion, sequenceNumber: nextSeq },
+        ];
+
+        mockInterviewAfterQuestionAdded = MockInterview({
+          panelistId: mockPanelistId,
+          id: mockInterviewId,
+          status: InterviewStatus.DRAFT,
+          questions: updatedQuestions,
+        });
+        jest
+          .spyOn(interviewsRepository, 'findById')
+          .mockResolvedValue(mockInterview);
+        jest
+          .spyOn(interviewsRepository, 'addQuestion')
+          .mockResolvedValue(mockInterviewAfterQuestionAdded);
+      });
+
+      it('should add question to interview', async () => {
+        await addQuestion(mockAddQuestionInput);
+        assertIfQuestionIsAdded(mockInterviewId, mockQuestion);
       });
     });
   });
