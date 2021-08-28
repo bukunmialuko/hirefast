@@ -1,4 +1,3 @@
-import { IsInt, IsNotEmpty, IsString } from 'class-validator';
 import {
   Interview,
   InterviewStatus,
@@ -10,6 +9,7 @@ import {
 import { Panelist } from 'src/hiring/domain/Panelist';
 import { AddQuestionInput } from 'src/hiring/usecases/add-question/AddQuestionInput.dto';
 import { CreateInterviewInput } from 'src/hiring/usecases/create-interview/CreateInterviewInput.dto';
+import { PublishInterviewInput } from 'src/hiring/usecases/publish-interview/PublishInterviewInput.dto';
 
 export const MockPanelist = (values?: Partial<Panelist>): Panelist => {
   const defaultValues = {
@@ -109,5 +109,20 @@ export const MockQuestion = (values?: Partial<Question>): Question => {
   mock.title = defaultValues.title;
   mock.responseType = defaultValues.responseType;
   mock.timeAllowedInMinutes = defaultValues.timeAllowedInMinutes;
+  return mock;
+};
+
+export const MockPublishInterviewInput = (
+  values?: Partial<PublishInterviewInput>,
+): PublishInterviewInput => {
+  const defaultValues = {
+    panelistId: 'sandjsadfjsakldjflsajvkjdl; as; ldj',
+    interviewId: 'saldjfklasjdfv;ajsdvjaisjdfnmefs',
+    ...values,
+  };
+
+  const mock = new PublishInterviewInput();
+  mock.panelistId = defaultValues.panelistId;
+  mock.interviewId = defaultValues.interviewId;
   return mock;
 };
