@@ -6,7 +6,8 @@ import {
 } from 'src/hiring/domain/interview/Interview';
 import { AddQuestionUseCase } from 'src/hiring/usecases/add-question/AddQuestion.usecase';
 import { AddQuestionInput } from 'src/hiring/usecases/add-question/AddQuestionInput.dto';
-import { InterviewHasBeenArchivedError } from 'src/hiring/usecases/add-question/InterviewHasBeenArchived.Error';
+import { InterviewHasBeenArchivedError } from 'src/hiring/usecases/add-question/InterviewHasBeenArchived.error';
+import { InterviewHasBeenDeletedError } from 'src/hiring/usecases/add-question/InterviewHasBeenDeleted.error';
 import { InterviewHasBeenPublishedError } from 'src/hiring/usecases/add-question/InterviewHasBeenPublished.error';
 import { InvalidInterviewIdError } from 'src/hiring/usecases/add-question/InvalidInterviewId.error';
 import {
@@ -118,6 +119,26 @@ describe('AddQuestion(UseCase)', () => {
       it('should throw an error', async () => {
         await expect(addQuestion(mockAddQuestionInput)).rejects.toThrowError(
           new InterviewHasBeenArchivedError(),
+        );
+        assertIfSearchedForInterviewId(mockInterviewId);
+      });
+    });
+
+    describe('and interview status is DELETED', () => {
+      beforeEach(() => {
+        mockInterview = MockInterview({
+          panelistId: mockPanelistId,
+          id: mockInterviewId,
+          status: InterviewStatus.DELETED,
+        });
+        jest
+          .spyOn(interviewsRepository, 'findById')
+          .mockResolvedValue(mockInterview);
+      });
+
+      it('should throw an error', async () => {
+        await expect(addQuestion(mockAddQuestionInput)).rejects.toThrowError(
+          new InterviewHasBeenDeletedError(),
         );
         assertIfSearchedForInterviewId(mockInterviewId);
       });
