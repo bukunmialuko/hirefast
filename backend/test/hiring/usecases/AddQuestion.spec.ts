@@ -1,3 +1,4 @@
+import { UnauthorizedException } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 import { INTERVIEWS_REPOSITORY } from 'src/hiring/details/IInterviewsRepository';
 import {
@@ -86,22 +87,19 @@ describe('AddQuestion(UseCase)', () => {
   });
 
   describe('when interview id is found', () => {
-    let mockAddQuestionInput;
-    let mockInterview;
-    const mockPanelistId = 'sajkdfasjdfkl;asjdfsd';
-    const mockInterviewId = 'asdkjfskl;adjfkl;jsadkl;fj;lsadf';
+    describe("and when panelistId in input doesn't matches with panelistId in Interview", () => {
+      let mockAddQuestionInput;
+      let mockInterview;
+      const mockPanelistId = 'sajkdfasjdfkl;asjdfsd';
+      const mockInterviewId = 'asdkjfskl;adjfkl;jsadkl;fj;lsadf';
 
-    beforeEach(() => {
-      mockAddQuestionInput = MockAddQuestionInput({
-        panelistId: mockPanelistId,
-        interviewId: mockInterviewId,
-      });
-    });
-
-    describe('and interview status is PUBLISHED', () => {
       beforeEach(() => {
-        mockInterview = MockInterview({
+        mockAddQuestionInput = MockAddQuestionInput({
           panelistId: mockPanelistId,
+          interviewId: mockInterviewId,
+        });
+        mockInterview = MockInterview({
+          panelistId: 'jadslkvjl;sdfjgbl;fjgiujoisfdjbljdlkfg',
           id: mockInterviewId,
           status: InterviewStatus.PUBLISHED,
         });
@@ -110,103 +108,136 @@ describe('AddQuestion(UseCase)', () => {
           .mockResolvedValue(mockInterview);
       });
 
-      it('should throw an error', async () => {
+      it('should throw error', async () => {
         await expect(addQuestion(mockAddQuestionInput)).rejects.toThrowError(
-          new InterviewIsPublishedError(),
+          new UnauthorizedException(),
         );
         assertIfSearchedForInterviewId(mockInterviewId);
       });
     });
 
-    describe('and interview status is ARCHIVED', () => {
+    describe('and when panelistId in input matches with panelistId in Interview', () => {
+      let mockAddQuestionInput;
+      let mockInterview;
+      const mockPanelistId = 'sajkdfasjdfkl;asjdfsd';
+      const mockInterviewId = 'asdkjfskl;adjfkl;jsadkl;fj;lsadf';
+
       beforeEach(() => {
-        mockInterview = MockInterview({
+        mockAddQuestionInput = MockAddQuestionInput({
           panelistId: mockPanelistId,
-          id: mockInterviewId,
-          status: InterviewStatus.ARCHIVED,
+          interviewId: mockInterviewId,
         });
-        jest
-          .spyOn(interviewsRepository, 'findById')
-          .mockResolvedValue(mockInterview);
       });
-
-      it('should throw an error', async () => {
-        await expect(addQuestion(mockAddQuestionInput)).rejects.toThrowError(
-          new InterviewIsArchivedError(),
-        );
-        assertIfSearchedForInterviewId(mockInterviewId);
-      });
-    });
-
-    describe('and interview status is DELETED', () => {
-      beforeEach(() => {
-        mockInterview = MockInterview({
-          panelistId: mockPanelistId,
-          id: mockInterviewId,
-          status: InterviewStatus.DELETED,
-        });
-        jest
-          .spyOn(interviewsRepository, 'findById')
-          .mockResolvedValue(mockInterview);
-      });
-
-      it('should throw an error', async () => {
-        await expect(addQuestion(mockAddQuestionInput)).rejects.toThrowError(
-          new InterviewIsDeletedError(),
-        );
-        assertIfSearchedForInterviewId(mockInterviewId);
-      });
-    });
-
-    describe('and interview status is DRAFT', () => {
-      let mockQuestion;
-      let mockInterviewAfterQuestionAdded;
-      beforeEach(() => {
-        mockQuestion = MockQuestion();
-        mockInterview = MockInterview({
-          panelistId: mockPanelistId,
-          id: mockInterviewId,
-          status: InterviewStatus.DRAFT,
+      describe('and interview status is PUBLISHED', () => {
+        beforeEach(() => {
+          mockInterview = MockInterview({
+            panelistId: mockPanelistId,
+            id: mockInterviewId,
+            status: InterviewStatus.PUBLISHED,
+          });
+          jest
+            .spyOn(interviewsRepository, 'findById')
+            .mockResolvedValue(mockInterview);
         });
 
-        const nextSeq = mockInterview.questions.length + 1;
-        const updatedQuestions = [
-          ...mockInterview.questions,
-          { ...mockQuestion, sequenceNumber: nextSeq },
-        ];
-
-        mockInterviewAfterQuestionAdded = MockInterview({
-          panelistId: mockPanelistId,
-          id: mockInterviewId,
-          status: InterviewStatus.DRAFT,
-          questions: updatedQuestions,
+        it('should throw an error', async () => {
+          await expect(addQuestion(mockAddQuestionInput)).rejects.toThrowError(
+            new InterviewIsPublishedError(),
+          );
+          assertIfSearchedForInterviewId(mockInterviewId);
         });
-        jest
-          .spyOn(interviewsRepository, 'findById')
-          .mockResolvedValue(mockInterview);
-        jest.spyOn(Question, 'create').mockReturnValue(mockQuestion);
-        jest
-          .spyOn(interviewsRepository, 'addQuestion')
-          .mockResolvedValue(mockInterviewAfterQuestionAdded);
       });
 
-      afterEach(() => {
-        assertIfSearchedForInterviewId(mockInterviewId);
+      describe('and interview status is ARCHIVED', () => {
+        beforeEach(() => {
+          mockInterview = MockInterview({
+            panelistId: mockPanelistId,
+            id: mockInterviewId,
+            status: InterviewStatus.ARCHIVED,
+          });
+          jest
+            .spyOn(interviewsRepository, 'findById')
+            .mockResolvedValue(mockInterview);
+        });
+
+        it('should throw an error', async () => {
+          await expect(addQuestion(mockAddQuestionInput)).rejects.toThrowError(
+            new InterviewIsArchivedError(),
+          );
+          assertIfSearchedForInterviewId(mockInterviewId);
+        });
       });
 
-      it('should create question with default sequence number', async () => {
-        await addQuestion(mockAddQuestionInput);
-        assertIfQuestionCreated(mockAddQuestionInput);
+      describe('and interview status is DELETED', () => {
+        beforeEach(() => {
+          mockInterview = MockInterview({
+            panelistId: mockPanelistId,
+            id: mockInterviewId,
+            status: InterviewStatus.DELETED,
+          });
+          jest
+            .spyOn(interviewsRepository, 'findById')
+            .mockResolvedValue(mockInterview);
+        });
+
+        it('should throw an error', async () => {
+          await expect(addQuestion(mockAddQuestionInput)).rejects.toThrowError(
+            new InterviewIsDeletedError(),
+          );
+          assertIfSearchedForInterviewId(mockInterviewId);
+        });
       });
 
-      it('should add question to interview', async () => {
-        await addQuestion(mockAddQuestionInput);
-        assertIfQuestionIsAdded(mockInterviewId, mockQuestion);
-      });
+      describe('and interview status is DRAFT', () => {
+        let mockQuestion;
+        let mockInterviewAfterQuestionAdded;
+        beforeEach(() => {
+          mockQuestion = MockQuestion();
+          mockInterview = MockInterview({
+            panelistId: mockPanelistId,
+            id: mockInterviewId,
+            status: InterviewStatus.DRAFT,
+          });
 
-      it('should return updated interview with response', async () => {
-        const response = await addQuestion(mockAddQuestionInput);
-        expect(response.interview).toEqual(mockInterviewAfterQuestionAdded);
+          const nextSeq = mockInterview.questions.length + 1;
+          const updatedQuestions = [
+            ...mockInterview.questions,
+            { ...mockQuestion, sequenceNumber: nextSeq },
+          ];
+
+          mockInterviewAfterQuestionAdded = MockInterview({
+            panelistId: mockPanelistId,
+            id: mockInterviewId,
+            status: InterviewStatus.DRAFT,
+            questions: updatedQuestions,
+          });
+          jest
+            .spyOn(interviewsRepository, 'findById')
+            .mockResolvedValue(mockInterview);
+          jest.spyOn(Question, 'create').mockReturnValue(mockQuestion);
+          jest
+            .spyOn(interviewsRepository, 'addQuestion')
+            .mockResolvedValue(mockInterviewAfterQuestionAdded);
+        });
+
+        afterEach(() => {
+          assertIfSearchedForInterviewId(mockInterviewId);
+        });
+
+        it('should create question with default sequence number', async () => {
+          await addQuestion(mockAddQuestionInput);
+          assertIfQuestionCreated(mockAddQuestionInput);
+        });
+
+        it('should add question to interview', async () => {
+          await addQuestion(mockAddQuestionInput);
+          assertIfQuestionIsAdded(mockInterviewId, mockQuestion);
+        });
+
+        it('should return updated interview with response', async () => {
+          const response = await addQuestion(mockAddQuestionInput);
+          expect(response.interview).toEqual(mockInterviewAfterQuestionAdded);
+        });
       });
     });
   });
