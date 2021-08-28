@@ -7,9 +7,9 @@ import {
 import { Question } from 'src/hiring/domain/interview/Question';
 import { AddQuestionUseCase } from 'src/hiring/usecases/add-question/AddQuestion.usecase';
 import { AddQuestionInput } from 'src/hiring/usecases/add-question/AddQuestionInput.dto';
-import { InterviewHasBeenArchivedError } from 'src/hiring/usecases/add-question/InterviewHasBeenArchived.error';
-import { InterviewHasBeenDeletedError } from 'src/hiring/usecases/add-question/InterviewHasBeenDeleted.error';
-import { InterviewHasBeenPublishedError } from 'src/hiring/usecases/add-question/InterviewHasBeenPublished.error';
+import { InterviewIsArchivedError } from 'src/hiring/usecases/add-question/InterviewIsArchived.error';
+import { InterviewIsDeletedError } from 'src/hiring/usecases/add-question/InterviewIsDeleted.error';
+import { InterviewIsPublishedError } from 'src/hiring/usecases/add-question/InterviewIsPublished.error';
 import { InvalidInterviewIdError } from 'src/hiring/usecases/add-question/InvalidInterviewId.error';
 import {
   MockAddQuestionInput,
@@ -112,7 +112,7 @@ describe('AddQuestion(UseCase)', () => {
 
       it('should throw an error', async () => {
         await expect(addQuestion(mockAddQuestionInput)).rejects.toThrowError(
-          new InterviewHasBeenPublishedError(),
+          new InterviewIsPublishedError(),
         );
         assertIfSearchedForInterviewId(mockInterviewId);
       });
@@ -132,7 +132,7 @@ describe('AddQuestion(UseCase)', () => {
 
       it('should throw an error', async () => {
         await expect(addQuestion(mockAddQuestionInput)).rejects.toThrowError(
-          new InterviewHasBeenArchivedError(),
+          new InterviewIsArchivedError(),
         );
         assertIfSearchedForInterviewId(mockInterviewId);
       });
@@ -152,7 +152,7 @@ describe('AddQuestion(UseCase)', () => {
 
       it('should throw an error', async () => {
         await expect(addQuestion(mockAddQuestionInput)).rejects.toThrowError(
-          new InterviewHasBeenDeletedError(),
+          new InterviewIsDeletedError(),
         );
         assertIfSearchedForInterviewId(mockInterviewId);
       });

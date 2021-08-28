@@ -10,15 +10,15 @@ import { InterviewStatus } from 'src/hiring/domain/interview/Interview';
 import { Question } from 'src/hiring/domain/interview/Question';
 import { AddQuestionInput } from 'src/hiring/usecases/add-question/AddQuestionInput.dto';
 import { AddQuestionResponse } from 'src/hiring/usecases/add-question/AddQuestionResponse.dto';
-import { InterviewHasBeenArchivedError } from 'src/hiring/usecases/add-question/InterviewHasBeenArchived.error';
-import { InterviewHasBeenDeletedError } from 'src/hiring/usecases/add-question/InterviewHasBeenDeleted.error';
-import { InterviewHasBeenPublishedError } from 'src/hiring/usecases/add-question/InterviewHasBeenPublished.error';
+import { InterviewIsArchivedError } from 'src/hiring/usecases/add-question/InterviewIsArchived.error';
+import { InterviewIsDeletedError } from 'src/hiring/usecases/add-question/InterviewIsDeleted.error';
+import { InterviewIsPublishedError } from 'src/hiring/usecases/add-question/InterviewIsPublished.error';
 import { InvalidInterviewIdError } from 'src/hiring/usecases/add-question/InvalidInterviewId.error';
 
 const MAP_STATUS_TO_ERROR = {
-  [InterviewStatus.DELETED]: InterviewHasBeenDeletedError,
-  [InterviewStatus.PUBLISHED]: InterviewHasBeenPublishedError,
-  [InterviewStatus.ARCHIVED]: InterviewHasBeenArchivedError,
+  [InterviewStatus.DELETED]: InterviewIsDeletedError,
+  [InterviewStatus.PUBLISHED]: InterviewIsPublishedError,
+  [InterviewStatus.ARCHIVED]: InterviewIsArchivedError,
 };
 
 @Injectable()
