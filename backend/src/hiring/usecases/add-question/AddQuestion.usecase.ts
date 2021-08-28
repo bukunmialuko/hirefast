@@ -9,6 +9,7 @@ import { InterviewStatus } from 'src/hiring/domain/interview/Interview';
 import { AddQuestionInput } from 'src/hiring/usecases/add-question/AddQuestionInput.dto';
 import { AddQuestionResponse } from 'src/hiring/usecases/add-question/AddQuestionResponse.dto';
 import { InterviewHasBeenArchivedError } from 'src/hiring/usecases/add-question/InterviewHasBeenArchived.error';
+import { InterviewHasBeenDeletedError } from 'src/hiring/usecases/add-question/InterviewHasBeenDeleted.error';
 import { InterviewHasBeenPublishedError } from 'src/hiring/usecases/add-question/InterviewHasBeenPublished.error';
 import { InvalidInterviewIdError } from 'src/hiring/usecases/add-question/InvalidInterviewId.error';
 
@@ -39,6 +40,10 @@ export class AddQuestionUseCase extends UseCase<
 
     if (interview.status === InterviewStatus.ARCHIVED) {
       throw new InterviewHasBeenArchivedError();
+    }
+
+    if (interview.status === InterviewStatus.DELETED) {
+      throw new InterviewHasBeenDeletedError();
     }
 
     return Promise.resolve(undefined);
