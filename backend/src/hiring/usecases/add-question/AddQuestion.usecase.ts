@@ -7,6 +7,7 @@ import {
   INTERVIEWS_REPOSITORY,
 } from 'src/hiring/details/IInterviewsRepository';
 import { InterviewStatus } from 'src/hiring/domain/interview/Interview';
+import { Question } from 'src/hiring/domain/interview/Question';
 import { AddQuestionInput } from 'src/hiring/usecases/add-question/AddQuestionInput.dto';
 import { AddQuestionResponse } from 'src/hiring/usecases/add-question/AddQuestionResponse.dto';
 import { InterviewHasBeenArchivedError } from 'src/hiring/usecases/add-question/InterviewHasBeenArchived.error';
@@ -45,6 +46,10 @@ export class AddQuestionUseCase extends UseCase<
     if (hasValue(InvalidStatusError)) {
       throw new InvalidStatusError();
     }
+
+    const question = Question.create(input);
+
+    await this.interviewsRepository.addQuestion(interviewId, question);
 
     return Promise.resolve(undefined);
   }
