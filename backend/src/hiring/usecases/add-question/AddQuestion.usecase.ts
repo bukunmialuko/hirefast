@@ -13,6 +13,12 @@ import { InterviewHasBeenDeletedError } from 'src/hiring/usecases/add-question/I
 import { InterviewHasBeenPublishedError } from 'src/hiring/usecases/add-question/InterviewHasBeenPublished.error';
 import { InvalidInterviewIdError } from 'src/hiring/usecases/add-question/InvalidInterviewId.error';
 
+const MAP_STATUS_TO_ERROR = {
+  [InterviewStatus.DELETED]: InterviewHasBeenDeletedError,
+  [InterviewStatus.PUBLISHED]: InterviewHasBeenPublishedError,
+  [InterviewStatus.ARCHIVED]: InterviewHasBeenArchivedError,
+};
+
 @Injectable()
 export class AddQuestionUseCase extends UseCase<
   AddQuestionInput,
@@ -34,16 +40,9 @@ export class AddQuestionUseCase extends UseCase<
       throw new InvalidInterviewIdError();
     }
 
-    if (interview.status === InterviewStatus.PUBLISHED) {
-      throw new InterviewHasBeenPublishedError();
-    }
-
-    if (interview.status === InterviewStatus.ARCHIVED) {
-      throw new InterviewHasBeenArchivedError();
-    }
-
-    if (interview.status === InterviewStatus.DELETED) {
-      throw new InterviewHasBeenDeletedError();
+    const InvalidStatusError = MAP_STATUS_TO_ERROR[interview.status];
+    if (hasValue(InvalidStatusError)) {
+      throw new InvalidStatusError();
     }
 
     return Promise.resolve(undefined);
