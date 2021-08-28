@@ -5,8 +5,10 @@ import {
   IInterviewsRepository,
   INTERVIEWS_REPOSITORY,
 } from 'src/hiring/details/IInterviewsRepository';
+import { InterviewStatus } from 'src/hiring/domain/interview/Interview';
 import { AddQuestionInput } from 'src/hiring/usecases/add-question/AddQuestionInput.dto';
 import { AddQuestionResponse } from 'src/hiring/usecases/add-question/AddQuestionResponse';
+import { InterviewHasBeenPublishedError } from 'src/hiring/usecases/add-question/InterviewHasBeenPublished.error';
 import { InvalidInterviewIdError } from 'src/hiring/usecases/add-question/InvalidInterviewId.error';
 
 @Injectable()
@@ -28,6 +30,10 @@ export class AddQuestionUseCase extends UseCase<
 
     if (!hasValue(interview)) {
       throw new InvalidInterviewIdError();
+    }
+
+    if (interview.status === InterviewStatus.PUBLISHED) {
+      throw new InterviewHasBeenPublishedError();
     }
 
     return Promise.resolve(undefined);

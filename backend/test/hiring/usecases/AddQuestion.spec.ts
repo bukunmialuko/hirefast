@@ -6,6 +6,8 @@ import {
 } from 'src/hiring/domain/interview/Interview';
 import { AddQuestionUseCase } from 'src/hiring/usecases/add-question/AddQuestion.usecase';
 import { AddQuestionInput } from 'src/hiring/usecases/add-question/AddQuestionInput.dto';
+import { InterviewHasBeenArchivedError } from 'src/hiring/usecases/add-question/InterviewHasBeenArchived.Error';
+import { InterviewHasBeenPublishedError } from 'src/hiring/usecases/add-question/InterviewHasBeenPublished.error';
 import { InvalidInterviewIdError } from 'src/hiring/usecases/add-question/InvalidInterviewId.error';
 import {
   MockAddQuestionInput,
@@ -94,7 +96,29 @@ describe('AddQuestion(UseCase)', () => {
       });
 
       it('should throw an error', async () => {
-        await expect(addQuestion(mockAddQuestionInput)).rejects.toThrowError();
+        await expect(addQuestion(mockAddQuestionInput)).rejects.toThrowError(
+          new InterviewHasBeenPublishedError(),
+        );
+        assertIfSearchedForInterviewId(mockInterviewId);
+      });
+    });
+
+    describe('and interview status is ARCHIVED', () => {
+      beforeEach(() => {
+        mockInterview = MockInterview({
+          panelistId: mockPanelistId,
+          id: mockInterviewId,
+          status: InterviewStatus.ARCHIVED,
+        });
+        jest
+          .spyOn(interviewsRepository, 'findById')
+          .mockResolvedValue(mockInterview);
+      });
+
+      it('should throw an error', async () => {
+        await expect(addQuestion(mockAddQuestionInput)).rejects.toThrowError(
+          new InterviewHasBeenArchivedError(),
+        );
         assertIfSearchedForInterviewId(mockInterviewId);
       });
     });
