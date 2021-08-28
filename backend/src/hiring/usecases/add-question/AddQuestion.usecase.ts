@@ -1,5 +1,6 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { hasValue } from 'src/@shared/core/HasValue';
+import { isNullOrUndefined } from 'src/@shared/core/IsNullOrUndefined';
 import { UseCase } from 'src/@shared/core/UseCase';
 import {
   IInterviewsRepository,
@@ -36,7 +37,7 @@ export class AddQuestionUseCase extends UseCase<
 
     const interview = await this.interviewsRepository.findById(interviewId);
 
-    if (!hasValue(interview)) {
+    if (isNullOrUndefined(interview)) {
       throw new InvalidInterviewIdError();
     }
 
