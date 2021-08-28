@@ -1,10 +1,16 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { INTERVIEWS_REPOSITORY } from 'src/hiring/details/IInterviewsRepository';
-import { Interview } from 'src/hiring/domain/interview/Interview';
+import {
+  Interview,
+  InterviewStatus,
+} from 'src/hiring/domain/interview/Interview';
 import { AddQuestionUseCase } from 'src/hiring/usecases/add-question/AddQuestion.usecase';
 import { AddQuestionInput } from 'src/hiring/usecases/add-question/AddQuestionInput.dto';
 import { InvalidInterviewIdError } from 'src/hiring/usecases/add-question/InvalidInterviewId.error';
-import { MockAddQuestionInput } from 'test/hiring/mocks/factories';
+import {
+  MockAddQuestionInput,
+  MockInterview,
+} from 'test/hiring/mocks/factories';
 
 describe('AddQuestion(UseCase)', () => {
   let addQuestionUseCase;
@@ -59,6 +65,38 @@ describe('AddQuestion(UseCase)', () => {
         new InvalidInterviewIdError(),
       );
       assertIfSearchedForInterviewId(mockInterviewId);
+    });
+  });
+
+  describe('when interview id is found', () => {
+    let mockAddQuestionInput;
+    let mockInterview;
+    const mockPanelistId = 'sajkdfasjdfkl;asjdfsd';
+    const mockInterviewId = 'asdkjfskl;adjfkl;jsadkl;fj;lsadf';
+
+    beforeEach(() => {
+      mockAddQuestionInput = MockAddQuestionInput({
+        panelistId: mockPanelistId,
+        interviewId: mockInterviewId,
+      });
+    });
+
+    describe('and interview status is PUBLISHED', () => {
+      beforeEach(() => {
+        mockInterview = MockInterview({
+          panelistId: mockPanelistId,
+          id: mockInterviewId,
+          status: InterviewStatus.PUBLISHED,
+        });
+        jest
+          .spyOn(interviewsRepository, 'findById')
+          .mockResolvedValue(mockInterview);
+      });
+
+      it('should throw an error', async () => {
+        await expect(addQuestion(mockAddQuestionInput)).rejects.toThrowError();
+        assertIfSearchedForInterviewId(mockInterviewId);
+      });
     });
   });
 });
