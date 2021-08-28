@@ -1,5 +1,5 @@
-import { UnauthorizedException } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
+import { UnauthorizedError } from 'src/@shared/errors/UnauthorizedError';
 import { INTERVIEWS_REPOSITORY } from 'src/hiring/details/IInterviewsRepository';
 import {
   Interview,
@@ -110,7 +110,7 @@ describe('AddQuestion(UseCase)', () => {
 
       it('should throw error', async () => {
         await expect(addQuestion(mockAddQuestionInput)).rejects.toThrowError(
-          new UnauthorizedException(),
+          new UnauthorizedError(),
         );
         assertIfSearchedForInterviewId(mockInterviewId);
       });
@@ -128,6 +128,7 @@ describe('AddQuestion(UseCase)', () => {
           interviewId: mockInterviewId,
         });
       });
+
       describe('and interview status is PUBLISHED', () => {
         beforeEach(() => {
           mockInterview = MockInterview({

@@ -2,6 +2,7 @@ import { Inject, Injectable } from '@nestjs/common';
 import { hasValue } from 'src/@shared/core/HasValue';
 import { isNullOrUndefined } from 'src/@shared/core/IsNullOrUndefined';
 import { UseCase } from 'src/@shared/core/UseCase';
+import { UnauthorizedError } from 'src/@shared/errors/UnauthorizedError';
 import {
   IInterviewsRepository,
   INTERVIEWS_REPOSITORY,
@@ -40,6 +41,10 @@ export class AddQuestionUseCase extends UseCase<
 
     if (isNullOrUndefined(interview)) {
       throw new InvalidInterviewIdError();
+    }
+
+    if (interview.panelistId !== input.panelistId) {
+      throw new UnauthorizedError();
     }
 
     const InvalidStatusError = MAP_STATUS_TO_ERROR[interview.status];
