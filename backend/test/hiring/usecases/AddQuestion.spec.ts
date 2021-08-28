@@ -190,6 +190,10 @@ describe('AddQuestion(UseCase)', () => {
           .mockResolvedValue(mockInterviewAfterQuestionAdded);
       });
 
+      afterEach(() => {
+        assertIfSearchedForInterviewId(mockInterviewId);
+      });
+
       it('should create question with default sequence number', async () => {
         await addQuestion(mockAddQuestionInput);
         assertIfQuestionCreated(mockAddQuestionInput);
