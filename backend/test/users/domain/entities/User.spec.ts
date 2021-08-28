@@ -1,6 +1,6 @@
-import { DateAndTime } from 'src/@shared/core/date-and-time';
-import { PasswordHasher } from 'src/@shared/core/password-hasher';
-import { UuidUtils } from 'src/@shared/core/uuid-utils';
+import { DateAndTime } from 'src/@shared/core/DateAndTime';
+import { PasswordHasher } from 'src/@shared/core/PasswordHasher';
+import { UuidUtils } from 'src/@shared/core/UuidUtils';
 import { User, UserStatus } from 'src/users/domain/entities/User';
 import { MockRegisterUserInput } from 'test/users/mocks/factories';
 

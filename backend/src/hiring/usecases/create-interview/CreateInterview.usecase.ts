@@ -1,6 +1,6 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { hasValue } from 'src/@shared/core/has-value';
-import { UseCase } from 'src/@shared/core/usecase';
+import { hasValue } from 'src/@shared/core/HasValue';
+import { UseCase } from 'src/@shared/core/UseCase';
 import {
   IInterviewsRepository,
   INTERVIEWS_REPOSITORY,

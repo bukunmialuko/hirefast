@@ -7,9 +7,9 @@ import {
   MaxLength,
   MinLength,
 } from 'class-validator';
-import { DateAndTime } from 'src/@shared/core/date-and-time';
-import { PasswordHasher } from 'src/@shared/core/password-hasher';
-import { UuidUtils } from 'src/@shared/core/uuid-utils';
+import { DateAndTime } from 'src/@shared/core/DateAndTime';
+import { PasswordHasher } from 'src/@shared/core/PasswordHasher';
+import { UuidUtils } from 'src/@shared/core/UuidUtils';
 import { RegisterUserInput } from 'src/users/usecases/register-user/RegisterUserInput.dto';
 
 export enum UserStatus {
