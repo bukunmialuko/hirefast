@@ -59,6 +59,10 @@ describe('AddQuestion(UseCase)', () => {
     );
   };
 
+  const assertIfQuestionCreated = (input: AddQuestionInput) => {
+    expect(Question.create).toHaveBeenCalledWith(input);
+  };
+
   describe('when interview id is not found', () => {
     let addQuestionInput;
 
@@ -180,9 +184,15 @@ describe('AddQuestion(UseCase)', () => {
         jest
           .spyOn(interviewsRepository, 'findById')
           .mockResolvedValue(mockInterview);
+        jest.spyOn(Question, 'create').mockReturnValue(mockQuestion);
         jest
           .spyOn(interviewsRepository, 'addQuestion')
           .mockResolvedValue(mockInterviewAfterQuestionAdded);
+      });
+
+      it('should create question with default sequence number', async () => {
+        await addQuestion(mockAddQuestionInput);
+        assertIfQuestionCreated(mockAddQuestionInput);
       });
 
       it('should add question to interview', async () => {
