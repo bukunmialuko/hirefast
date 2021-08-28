@@ -1,9 +1,8 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { INTERVIEWS_REPOSITORY } from 'src/hiring/details/IInterviewsRepository';
-import { Interview } from 'src/hiring/domain/interview/Interview';
-import { Question } from 'src/hiring/domain/interview/Question';
+import { PublishInterviewUseCase } from 'src/hiring/usecases/publish-interview/PublishInterview.usecase';
 
-describe('AddQuestion(UseCase)', () => {
+describe('PublishInterview(UseCase)', () => {
   let publishInterviewUseCase;
 
   const interviewsRepository = {};
