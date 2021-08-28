@@ -8,6 +8,7 @@ import {
 import { InterviewStatus } from 'src/hiring/domain/interview/Interview';
 import { AddQuestionInput } from 'src/hiring/usecases/add-question/AddQuestionInput.dto';
 import { AddQuestionResponse } from 'src/hiring/usecases/add-question/AddQuestionResponse';
+import { InterviewHasBeenArchivedError } from 'src/hiring/usecases/add-question/InterviewHasBeenArchived.Error';
 import { InterviewHasBeenPublishedError } from 'src/hiring/usecases/add-question/InterviewHasBeenPublished.error';
 import { InvalidInterviewIdError } from 'src/hiring/usecases/add-question/InvalidInterviewId.error';
 
@@ -34,6 +35,10 @@ export class AddQuestionUseCase extends UseCase<
 
     if (interview.status === InterviewStatus.PUBLISHED) {
       throw new InterviewHasBeenPublishedError();
+    }
+
+    if (interview.status === InterviewStatus.ARCHIVED) {
+      throw new InterviewHasBeenArchivedError();
     }
 
     return Promise.resolve(undefined);
