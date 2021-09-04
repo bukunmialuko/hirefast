@@ -1,3 +1,4 @@
+import { Candidate } from 'src/hiring/domain/interview/Candidate';
 import {
   Interview,
   InterviewStatus,
@@ -14,4 +15,5 @@ export interface IInterviewsRepository {
     id: string,
     status: InterviewStatus,
   ): Promise<Interview>;
+  findCandidateByEmail(email: string): Promise<Candidate | undefined>;
 }

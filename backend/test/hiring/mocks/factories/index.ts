@@ -157,3 +157,25 @@ export const MockAddCandidateInput = (
   mock.phoneNumber = defaultValues.phoneNumber;
   return mock;
 };
+
+export const MockCandidate = (values?: Partial<Candidate>): Candidate => {
+  const defaultValues = {
+    id: 'dslfkjgl;dsfjgb;ldsjfgjdsfgdsfhdsfg',
+    interviewId: 'kjvhlksdfjvklklvkjhvnkl;jblk;jwdjkfvjsvdsfgvdf',
+    name: 'Forrest Gump',
+    email: 'forrest.gump@gmail.com',
+    phoneNumber: '+919781795334',
+    createdAt: '2021-08-27T09:41:27.851Z',
+    updatedAt: '2021-08-27T09:41:27.851Z',
+    ...values,
+  };
+  const mock = new Candidate();
+  mock.id = defaultValues.id;
+  mock.interviewId = defaultValues.interviewId;
+  mock.name = defaultValues.name;
+  mock.email = defaultValues.email;
+  mock.phoneNumber = defaultValues.phoneNumber;
+  mock.createdAt = defaultValues.createdAt;
+  mock.updatedAt = defaultValues.updatedAt;
+  return mock;
+};

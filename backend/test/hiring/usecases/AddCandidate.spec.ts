@@ -1,12 +1,13 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { rejects } from 'assert';
 import { UnauthorizedError } from 'src/@shared/errors/UnauthorizedError';
 import { INTERVIEWS_REPOSITORY } from 'src/hiring/details/IInterviewsRepository';
 import { AddCandidateUseCase } from 'src/hiring/usecases/add-candidate/AddCandidate.usecase';
 import { AddCandidateInput } from 'src/hiring/usecases/add-candidate/AddCandidateInput.dto';
+import { CandidateAlreadyAddedError } from 'src/hiring/usecases/add-candidate/CandidateAlreadyAddedError';
 import { InvalidInterviewIdError } from 'src/hiring/usecases/add-question/InvalidInterviewId.error';
 import {
   MockAddCandidateInput,
+  MockCandidate,
   MockInterview,
 } from 'test/hiring/mocks/factories';
 
@@ -15,6 +16,7 @@ describe('AddCandidate(UseCase)', () => {
 
   const interviewsRepository = {
     findById: (id: string) => undefined,
+    findCandidateByEmail: (email: string) => undefined,
   };
 
   beforeEach(async () => {
@@ -41,6 +43,12 @@ describe('AddCandidate(UseCase)', () => {
 
   const assertIfSearchedForInterviewId = (id: string) => {
     expect(interviewsRepository.findById).toBeCalledWith(id);
+  };
+
+  const assertIfSearchedForCandidateWithEmail = (email: string) => {
+    expect(interviewsRepository.findCandidateByEmail).toHaveBeenCalledWith(
+      email,
+    );
   };
 
   describe('should search for interview id', () => {
@@ -88,6 +96,44 @@ describe('AddCandidate(UseCase)', () => {
             new UnauthorizedError(),
           );
           assertIfSearchedForInterviewId(addCandidateInput.interviewId);
+        });
+      });
+
+      describe('and when panelistId in input matches with panelistId in Interview', () => {
+        const interviewId = 'asfvjdlkfbvlkdajfvasdfvkasdvasdsd';
+        const panelistId = 'asjdvlk;asjdvkl;jfjbjfjcvdfvjefbdsfbdsfgb';
+        let addCandidateInput;
+        let interview;
+        beforeEach(() => {
+          interview = MockInterview({
+            id: interviewId,
+            panelistId: panelistId,
+          });
+          addCandidateInput = MockAddCandidateInput({
+            interviewId: interviewId,
+            panelistId: panelistId,
+          });
+          jest
+            .spyOn(interviewsRepository, 'findById')
+            .mockResolvedValue(interview);
+        });
+
+        describe('should check if candidate email is already present or not', () => {
+          describe('when candidate email already present', () => {
+            let candidate;
+            beforeEach(() => {
+              candidate = MockCandidate();
+              jest
+                .spyOn(interviewsRepository, 'findCandidateByEmail')
+                .mockResolvedValue(candidate);
+            });
+            it('should throw error', async () => {
+              await expect(
+                addCandidate(addCandidateInput),
+              ).rejects.toThrowError(new CandidateAlreadyAddedError());
+              assertIfSearchedForCandidateWithEmail(addCandidateInput.email);
+            });
+          });
         });
       });
     });
