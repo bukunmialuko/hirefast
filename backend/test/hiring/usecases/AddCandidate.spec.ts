@@ -1,5 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { INTERVIEWS_REPOSITORY } from 'src/hiring/details/IInterviewsRepository';
+import { AddCandidateUseCase } from 'src/hiring/usecases/add-candidate/AddCandidate.usecase';
 
 describe('AddCandidate(UseCase)', () => {
   let addCandidateUseCase;
