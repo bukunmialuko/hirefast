@@ -1,8 +1,14 @@
 import { Test, TestingModule } from '@nestjs/testing';
+import { rejects } from 'assert';
+import { UnauthorizedError } from 'src/@shared/errors/UnauthorizedError';
 import { INTERVIEWS_REPOSITORY } from 'src/hiring/details/IInterviewsRepository';
 import { AddCandidateUseCase } from 'src/hiring/usecases/add-candidate/AddCandidate.usecase';
 import { AddCandidateInput } from 'src/hiring/usecases/add-candidate/AddCandidateInput.dto';
-import { MockAddCandidateInput } from 'test/hiring/mocks/factories';
+import { InvalidInterviewIdError } from 'src/hiring/usecases/add-question/InvalidInterviewId.error';
+import {
+  MockAddCandidateInput,
+  MockInterview,
+} from 'test/hiring/mocks/factories';
 
 describe('AddCandidate(UseCase)', () => {
   let addCandidateUseCase;
@@ -47,8 +53,42 @@ describe('AddCandidate(UseCase)', () => {
       });
 
       it('should throw error', async () => {
-        await expect(addCandidate(addCandidateInput)).rejects.toThrowError();
+        await expect(addCandidate(addCandidateInput)).rejects.toThrowError(
+          new InvalidInterviewIdError(),
+        );
         assertIfSearchedForInterviewId(addCandidateInput.interviewId);
+      });
+    });
+
+    describe('when interview id found', () => {
+      describe("and when panelistId in input doesn't matches with panelistId in Interview", () => {
+        const interviewId = 'asfvjdlkfbvlkdajfvasdfvkasdvasdsd';
+        const panelistIdInInterview =
+          'asjdvlk;asjdvkl;jfjbjfjcvdfvjefbdsfbdsfgb';
+        const panelistIdInInput =
+          'oiogkblsdkfkvkldkfvlksdvlkdsfvkasdkfvadsfvgvsdafv';
+        let addCandidateInput;
+        let interview;
+        beforeEach(() => {
+          interview = MockInterview({
+            id: interviewId,
+            panelistId: panelistIdInInterview,
+          });
+          addCandidateInput = MockAddCandidateInput({
+            interviewId: interviewId,
+            panelistId: panelistIdInInput,
+          });
+          jest
+            .spyOn(interviewsRepository, 'findById')
+            .mockResolvedValue(interview);
+        });
+
+        it('should throw error', async () => {
+          await expect(addCandidate(addCandidateInput)).rejects.toThrowError(
+            new UnauthorizedError(),
+          );
+          assertIfSearchedForInterviewId(addCandidateInput.interviewId);
+        });
       });
     });
   });

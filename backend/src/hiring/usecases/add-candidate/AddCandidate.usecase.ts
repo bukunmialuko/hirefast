@@ -1,6 +1,7 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { isNullOrUndefined } from 'src/@shared/core/IsNullOrUndefined';
 import { UseCase } from 'src/@shared/core/UseCase';
+import { UnauthorizedError } from 'src/@shared/errors/UnauthorizedError';
 import {
   IInterviewsRepository,
   INTERVIEWS_REPOSITORY,
@@ -26,6 +27,9 @@ export class AddCandidateUseCase extends UseCase<
     const interview = await this.interviewsRepository.findById(interviewId);
     if (isNullOrUndefined(interview)) {
       throw new InvalidInterviewIdError();
+    }
+    if (interview.panelistId !== input.panelistId) {
+      throw new UnauthorizedError();
     }
     return Promise.resolve(undefined);
   }
