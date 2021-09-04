@@ -1,4 +1,14 @@
 import {
+  IsEmail,
+  IsNotEmpty,
+  IsPhoneNumber,
+  IsString,
+  IsUUID,
+  MaxLength,
+  MinLength,
+} from 'class-validator';
+import { Candidate } from 'src/hiring/domain/interview/Candidate';
+import {
   Interview,
   InterviewStatus,
 } from 'src/hiring/domain/interview/Interview';
@@ -7,6 +17,7 @@ import {
   QuestionResponse,
 } from 'src/hiring/domain/interview/Question';
 import { Panelist } from 'src/hiring/domain/Panelist';
+import { AddCandidateInput } from 'src/hiring/usecases/add-candidate/AddCandidateInput.dto';
 import { AddQuestionInput } from 'src/hiring/usecases/add-question/AddQuestionInput.dto';
 import { CreateInterviewInput } from 'src/hiring/usecases/create-interview/CreateInterviewInput.dto';
 import { PublishInterviewInput } from 'src/hiring/usecases/publish-interview/PublishInterviewInput.dto';
@@ -124,5 +135,25 @@ export const MockPublishInterviewInput = (
   const mock = new PublishInterviewInput();
   mock.panelistId = defaultValues.panelistId;
   mock.interviewId = defaultValues.interviewId;
+  return mock;
+};
+
+export const MockAddCandidateInput = (
+  values?: Partial<AddCandidateInput>,
+): AddCandidateInput => {
+  const defaultValues = {
+    interviewId: 'kjvhlksdfjvklklvkjhvnkl;jblk;jwdjkfvjsvdsfgvdf',
+    panelistId: 'sdfgdsvbsdfkvjfbl;adslvjsdfbsdflvjl;dfv',
+    name: 'Forrest Gump',
+    email: 'forrest.gump@gmail.com',
+    phoneNumber: '+919781795334',
+    ...values,
+  };
+  const mock = new AddCandidateInput();
+  mock.interviewId = defaultValues.interviewId;
+  mock.panelistId = defaultValues.panelistId;
+  mock.name = defaultValues.name;
+  mock.email = defaultValues.email;
+  mock.phoneNumber = defaultValues.phoneNumber;
   return mock;
 };
