@@ -1,6 +1,7 @@
 import { User, UserStatus } from 'src/users/domain/entities/User';
 import { Verification } from 'src/users/domain/entities/Verification';
 import { VerificationEmail } from 'src/users/domain/entities/VerificationEmail';
+import { LoginUserInput } from 'src/users/usecases/login-user/LoginUserInput.dto';
 import { RegisterUserInput } from 'src/users/usecases/register-user/RegisterUserInput.dto';
 
 export const MockRegisterUserInput = (
@@ -63,4 +64,20 @@ export const MockVerificationEmail = (
   };
 
   return { ...defaultValues, ...values };
+};
+
+export const MockLoginUserInput = (
+  values?: Partial<LoginUserInput>,
+): LoginUserInput => {
+  const defaultValues: LoginUserInput = {
+    email: 'mockuser@gmail.com',
+    password: 'whywetypepasswords',
+    ...values,
+  };
+
+  const mock = new LoginUserInput();
+  mock.email = defaultValues.email;
+  mock.password = defaultValues.password;
+
+  return mock;
 };
