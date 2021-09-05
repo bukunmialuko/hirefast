@@ -193,6 +193,7 @@ describe('AddQuestion(UseCase)', () => {
         let mockQuestion;
         let mockInterviewAfterQuestionAdded;
         beforeEach(() => {
+          jest.clearAllMocks();
           mockQuestion = MockQuestion();
           mockInterview = MockInterview({
             panelistId: mockPanelistId,

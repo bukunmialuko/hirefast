@@ -16,4 +16,5 @@ export interface IInterviewsRepository {
     status: InterviewStatus,
   ): Promise<Interview>;
   findCandidateByEmail(email: string): Promise<Candidate | undefined>;
+  addCandidate(candidate: Candidate): Promise<Candidate>;
 }

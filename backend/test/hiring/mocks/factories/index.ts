@@ -1,12 +1,3 @@
-import {
-  IsEmail,
-  IsNotEmpty,
-  IsPhoneNumber,
-  IsString,
-  IsUUID,
-  MaxLength,
-  MinLength,
-} from 'class-validator';
 import { Candidate } from 'src/hiring/domain/interview/Candidate';
 import {
   Interview,
@@ -164,6 +155,7 @@ export const MockCandidate = (values?: Partial<Candidate>): Candidate => {
     interviewId: 'kjvhlksdfjvklklvkjhvnkl;jblk;jwdjkfvjsvdsfgvdf',
     name: 'Forrest Gump',
     email: 'forrest.gump@gmail.com',
+    password: 'sajkdhkjlashdvkjlhasfhvgsakdhjfklsad',
     phoneNumber: '+919781795334',
     createdAt: '2021-08-27T09:41:27.851Z',
     updatedAt: '2021-08-27T09:41:27.851Z',
@@ -174,6 +166,7 @@ export const MockCandidate = (values?: Partial<Candidate>): Candidate => {
   mock.interviewId = defaultValues.interviewId;
   mock.name = defaultValues.name;
   mock.email = defaultValues.email;
+  mock.password = defaultValues.password;
   mock.phoneNumber = defaultValues.phoneNumber;
   mock.createdAt = defaultValues.createdAt;
   mock.updatedAt = defaultValues.updatedAt;

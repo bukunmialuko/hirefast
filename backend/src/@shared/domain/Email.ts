@@ -1,4 +1,4 @@
-export abstract interface Email {
+export interface Email {
   senderProvider: string;
   body: string;
   to: string;
