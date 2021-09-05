@@ -1,8 +1,8 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { USER_REPOSITORY } from 'src/users/details/IUserRepository';
-import { RegisterUserUseCase } from 'src/users/usecases/register-user/RegisterUser.usecase';
+import { LoginUserUseCase } from 'src/users/usecases/login-user/LoginUser.usecase';
 
-describe('RegisterUser(UseCase)', () => {
+describe('LoginUser(UseCase)', () => {
   let loginUserUseCase;
   const userRepository = {
     findByEmail: (email: string) => undefined,
