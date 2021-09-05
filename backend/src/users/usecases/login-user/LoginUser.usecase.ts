@@ -1,11 +1,12 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { isNullOrUndefined } from 'src/@shared/core/IsNullOrUndefined';
+import { PasswordHasher } from 'src/@shared/core/PasswordHasher';
 import { UseCase } from 'src/@shared/core/UseCase';
 import {
   IUserRepository,
   USER_REPOSITORY,
 } from 'src/users/details/IUserRepository';
-import { User, UserStatus } from 'src/users/domain/entities/User';
+import { UserStatus } from 'src/users/domain/entities/User';
 import { LoginUserInput } from 'src/users/usecases/login-user/LoginUserInput.dto';
 import { LoginUserResponse } from 'src/users/usecases/login-user/LoginUserResponse.dto';
 import { UserEmailNotVerifiedError } from 'src/users/usecases/login-user/UserEmailNotVerified.error';
@@ -29,7 +30,8 @@ export class LoginUserUseCase extends UseCase<
   }
 
   async run(input: LoginUserInput): Promise<LoginUserResponse> {
-    const { email } = input;
+    const { email, password } = input;
+
     const user = await this.userRepository.findByEmail(email);
     if (isNullOrUndefined(user)) {
       throw new UserEmailOrPasswordDoesNotMatchError();
@@ -38,6 +40,11 @@ export class LoginUserUseCase extends UseCase<
     const UserStatusError = MAP_STATUS_TO_ERROR[user.status];
     if (UserStatusError) {
       throw new UserStatusError();
+    }
+
+    const passwordMatch = PasswordHasher.compare(password, user.password);
+    if (!passwordMatch) {
+      throw new UserEmailOrPasswordDoesNotMatchError();
     }
 
     return Promise.resolve(undefined);
