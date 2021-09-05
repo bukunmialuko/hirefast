@@ -1,5 +1,4 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { hasValue } from 'src/@shared/core/HasValue';
 import { isNullOrUndefined } from 'src/@shared/core/IsNullOrUndefined';
 import { UseCase } from 'src/@shared/core/UseCase';
 import {
@@ -10,7 +9,6 @@ import {
   IVerificationRepository,
   VERIFICATION_REPOSITORY,
 } from 'src/users/details/IVerificationRepository';
-import { UserStatus } from 'src/users/domain/entities/User';
 import { Verification } from 'src/users/domain/entities/Verification';
 import { VerificationEmail } from 'src/users/domain/entities/VerificationEmail';
 import {
